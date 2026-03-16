@@ -2,28 +2,21 @@ import axios from "axios";
 
 const hostname = window.location.hostname;
 const protocol = window.location.protocol;
+
+// Detection for local vs remote
 const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
 
-// Robust API URL detection
-let baseURL;
+// IMPORTANT: In production, the API should be on the same hostname as the UI
+// If the UI is on port 5173, the API is on port 8000
+const baseURL = isLocal 
+    ? 'http://localhost:8000/api/' 
+    : `${protocol}//${hostname}:8000/api/`;
 
-if (isLocal) {
-    baseURL = 'http://localhost:8000/api/';
-} else if (hostname.match(/^[0-9.]+$/)) {
-    // It's an IP address, use the same protocol as the page but port 8000
-    // Note: If protocol is https, calling an http port 8000 will fail
-    baseURL = `${protocol}//${hostname}:8000/api/`;
-} else {
-    // It's a domain name (like duckdns.org)
-    // If we're on a custom domain, the API might be on a subpath /api/ 
-    // or on port 8000 of the same domain.
-    // Try both: if no port in URL, assume it's a proxy setup
-    baseURL = window.location.port 
-        ? `${protocol}//${hostname}:8000/api/` 
-        : `${window.location.origin}/api/`;
-}
-
-console.log("API Base URL:", baseURL);
+console.log("--- API CONNECTION DEBUG ---");
+console.log("Hostname:", hostname);
+console.log("Protocol:", protocol);
+console.log("Resolved Base URL:", baseURL);
+console.log("----------------------------");
 
 const API = axios.create({
     baseURL: baseURL,
