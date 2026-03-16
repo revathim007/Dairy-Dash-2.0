@@ -25,7 +25,14 @@ DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "dairydash.duckdns.org", "40.81.244.46", ".azurewebsites.net"]
 
 # CSRF TRUSTED ORIGINS
-CSRF_TRUSTED_ORIGINS = ["https://dairydash.duckdns.org", "http://40.81.244.46:5173", "https://*.azurewebsites.net"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://dairydash.duckdns.org", 
+    "http://40.81.244.46:5173", 
+    "https://40.81.244.46:5173",
+    "http://dairydash.duckdns.org:5173",
+    "https://dairydash.duckdns.org:5173",
+    "https://*.azurewebsites.net"
+]
 
 
 # Application definition

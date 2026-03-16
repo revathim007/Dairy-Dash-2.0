@@ -1,12 +1,14 @@
 import axios from "axios";
 
 const hostname = window.location.hostname;
+const protocol = window.location.protocol;
 const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
 
 // If we're on the VM IP, but on port 5173, the backend is on port 8000
+// Use the same protocol as the current page (http or https)
 const baseURL = isLocal 
     ? 'http://localhost:8000/api/' 
-    : `http://${hostname}:8000/api/`;
+    : `${protocol}//${hostname}:8000/api/`;
 
 const API = axios.create({
     baseURL: baseURL,
