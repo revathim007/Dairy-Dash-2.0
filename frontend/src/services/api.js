@@ -10,13 +10,20 @@ let baseURL;
 if (isLocal) {
     baseURL = 'http://localhost:8000/api/';
 } else if (hostname.match(/^[0-9.]+$/)) {
-    // It's an IP address, use port 8000 explicitly
-    baseURL = `http://${hostname}:8000/api/`;
+    // It's an IP address, use the same protocol as the page but port 8000
+    // Note: If protocol is https, calling an http port 8000 will fail
+    baseURL = `${protocol}//${hostname}:8000/api/`;
 } else {
     // It's a domain name (like duckdns.org)
-    // Try to see if there's a port in the URL, if not, use the same protocol as the page
-    baseURL = `${protocol}//${hostname}${window.location.port ? ':8000' : ''}/api/`;
+    // If we're on a custom domain, the API might be on a subpath /api/ 
+    // or on port 8000 of the same domain.
+    // Try both: if no port in URL, assume it's a proxy setup
+    baseURL = window.location.port 
+        ? `${protocol}//${hostname}:8000/api/` 
+        : `${window.location.origin}/api/`;
 }
+
+console.log("API Base URL:", baseURL);
 
 const API = axios.create({
     baseURL: baseURL,

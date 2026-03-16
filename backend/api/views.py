@@ -313,11 +313,14 @@ def dashboard_stats(request):
     })
 
 
+from django.views.decorators.csrf import csrf_exempt
+
 # -----------------------------
-# Register Customer
+# Registration API (PUBLIC)
 # -----------------------------
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def register_customer(request):
 
     serializer = RegisterSerializer(data=request.data)
