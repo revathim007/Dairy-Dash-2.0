@@ -6,11 +6,11 @@ const protocol = window.location.protocol;
 // Detection for local vs remote
 const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
 
-// IMPORTANT: In production, the API should be on the same hostname as the UI
-// If the UI is on port 5173, the API is on port 8000
+// FORCE the API to use the current hostname but port 8000
+// This is the most reliable way for Azure VM deployment
 const baseURL = isLocal 
     ? 'http://localhost:8000/api/' 
-    : `${protocol}//${hostname}:8000/api/`;
+    : `http://${hostname}:8000/api/`;
 
 console.log("--- API CONNECTION DEBUG ---");
 console.log("Hostname:", hostname);
